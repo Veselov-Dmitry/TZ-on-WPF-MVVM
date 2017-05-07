@@ -1,0 +1,246 @@
+﻿<Window x:Class="TZ.MainWindowView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TZ"
+        mc:Ignorable="d"
+        Title="TZ" Height="350" Width="525">
+    <Window.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="FontSize" Value="14" />
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="FontSize" Value="14" />
+        </Style>
+        <Style x:Key="EmptyListTextBlock" TargetType="{x:Type TextBlock}">
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Visibility" Value="Collapsed" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding ElementName=lstItems, Path=Items.Count}" Value="0">
+                    <Setter Property="Visibility" Value="Visible" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="EmptyListTextBox" TargetType="TextBox">
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="IsEnabled" Value="True" />
+            <Setter Property="ToolTip" Value="{Binding RelativeSource={RelativeSource Mode=Self},Path=(AutomationProperties.HelpText)}" />
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="true">
+                    <Setter Property="ToolTip" Value="{Binding RelativeSource={x:Static RelativeSource.Self},Path=(Validation.Errors)[0].ErrorContent}" />
+                    <Setter Property="ToolTip.Placement" Value="Bottom"/>
+                    <Setter Property="BorderBrush" Value="Red"/>
+                    <Setter Property="ToolTipService.InitialShowDelay" Value="0"/>
+                    <Setter Property="ToolTipService.ShowDuration" Value="5000"/>
+                </Trigger>
+                <DataTrigger Binding="{Binding ElementName=lstItems, Path=Items.Count}" Value="0">
+                    <Setter Property="IsEnabled" Value="False" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="Button" TargetType="Button">
+            <Setter Property="Width" Value="80" />
+            <Setter Property="Margin" Value="5" />
+            <Setter Property="IsEnabled" Value="True" />
+        </Style>
+        <Style x:Key="CreateButton" TargetType="Button" BasedOn="{StaticResource Button}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding ElementName=firstNameTB, Path=BorderBrush}" Value="Red">
+                    <Setter Property="IsEnabled" Value="False"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding ElementName=lastTB, Path=BorderBrush}" Value="Red">
+                    <Setter Property="IsEnabled" Value="False"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding ElementName=ageTB, Path=BorderBrush}" Value="Red">
+                    <Setter Property="IsEnabled" Value="False"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="SaveButton" TargetType="Button" BasedOn="{StaticResource Button}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding ElementName=lstItems, Path=Items.Count}" Value="0">
+                    <Setter Property="IsEnabled" Value="False" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding ElementName=firstNameTB, Path=BorderBrush}" Value="Red">
+                    <Setter Property="IsEnabled" Value="False"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding ElementName=lastTB, Path=BorderBrush}" Value="Red">
+                    <Setter Property="IsEnabled" Value="False"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding ElementName=ageTB, Path=BorderBrush}" Value="Red">
+                    <Setter Property="IsEnabled" Value="False"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="EmptyListComboBox" TargetType="ComboBox">
+            <Setter Property="Width" Value="48"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="IsEnabled" Value="True" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding ElementName=lstItems, Path=Items.Count}" Value="0">
+                    <Setter Property="IsEnabled" Value="False" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="ChangeColor" TargetType="{x:Type ListBoxItem}">
+            <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+            <Setter Property="IsEnabled" Value="True"/>
+            <Style.Triggers>
+                <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                    <Setter Property="Background" Value="LightGoldenrodYellow"/>
+                    <Setter Property="Foreground" Value="Black"/>
+                </Trigger>
+                <Trigger Property="ItemsControl.AlternationIndex" Value="0">
+                    <Setter Property="Background" Value="#99cc99"/>
+                    <Setter Property="Foreground" Value="White"/>
+                </Trigger>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Foreground" Value="Gray"/>
+                </Trigger>
+
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="ListBox" TargetType="{x:Type ListBox}">
+            <Setter Property="IsEnabled" Value="True"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding ElementName=firstNameTB, Path=BorderBrush}" Value="Red">
+                    <Setter Property="IsEnabled" Value="False"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding ElementName=lastTB, Path=BorderBrush}" Value="Red">
+                    <Setter Property="IsEnabled" Value="False"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding ElementName=ageTB, Path=BorderBrush}" Value="Red">
+                    <Setter Property="IsEnabled" Value="False"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="Last" TargetType="TextBlock">
+            <Setter Property="Margin" Value="5,0"/>
+        </Style>
+        <Style TargetType="GroupBox">
+            <Setter Property="Margin" Value="5,0"/>
+        </Style>
+        <Style x:Key="RunGender" TargetType="{x:Type Run}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Gender}" Value="0">
+                    <Setter Property="Text" Value="М"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Gender}" Value="1">
+                    <Setter Property="Text" Value="Ж"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="0.8*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="0.7*" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Column="0" Panel.ZIndex="1" Margin="4" FontStyle="Italic" Text="Список пуст" Style="{StaticResource EmptyListTextBlock}"/>
+        <ListBox Grid.Column="0" 
+                 Grid.RowSpan="2" 
+                 Name="lstItems"
+                 Panel.ZIndex="0"
+                 Style="{StaticResource ListBox}"
+                 ItemsSource="{Binding Students}"
+                 SelectedItem="{Binding SelectedStudent}"
+                 ItemContainerStyle="{StaticResource ChangeColor}"
+                 SelectionMode="Extended" 
+                 AlternationCount="2">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Margin="5">
+                        <WrapPanel>
+                            <TextBlock Text="{Binding Path=FirstName}" />
+                            <TextBlock Text="{Binding Path=Last}"  Style="{StaticResource Last}"/>
+                        </WrapPanel>
+                        <WrapPanel>
+                            <TextBlock Text="{Binding Path=Age}"/>
+                            <TextBlock Text="{Binding Path=Suffix}"/>
+                            <TextBlock>
+                                <Run Text=" пол("/>
+                                <Run Style="{StaticResource RunGender}"/>
+                                <Run Text=")"/>
+                            </TextBlock>
+                        </WrapPanel>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <GroupBox Header="Выбранный элемент" Grid.Column="1">
+            <StackPanel  DataContext="{Binding SelectedStudent}">
+                <TextBlock Text="Имя" />
+
+                <TextBox  x:Name="firstNameTB"
+                    Style="{StaticResource EmptyListTextBox}">
+                    <TextBox.Text>
+                        <Binding Path="FirstName">
+                            <Binding.ValidationRules>
+                                <DataErrorValidationRule />
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+                <TextBlock Text="Фамилия" />
+                <TextBox  x:Name="lastTB"
+                     Style="{StaticResource EmptyListTextBox}">
+                    <TextBox.Text>
+                        <Binding Path="Last">
+                            <Binding.ValidationRules>
+                                <DataErrorValidationRule />
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+                <TextBlock Text="Возраст" />
+                <TextBox   x:Name="ageTB"
+                    Style="{StaticResource EmptyListTextBox}">
+                    <TextBox.Text>
+                        <Binding Path="Age">
+                            <Binding.ValidationRules>
+                                <DataErrorValidationRule />
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+                <TextBlock Text="Пол" />
+                <ComboBox SelectedIndex="{Binding Path=Gender, UpdateSourceTrigger=PropertyChanged}"   Style="{StaticResource EmptyListComboBox}">
+                    <ListBoxItem Content="М"/>
+                    <ListBoxItem Content="Ж"/>
+                </ComboBox>
+            </StackPanel>
+        </GroupBox>
+
+        <StackPanel Grid.Row="1" Grid.Column="1"  >
+            <GroupBox Header="Управление списком">
+                <WrapPanel>
+                    <Button Command="{Binding AddCommand}" Style="{StaticResource CreateButton}" >
+                        <TextBlock Text="Создать"/>
+                    </Button>
+                    <Button Command="{Binding RemoveCommand}"   Style="{StaticResource Button}" 
+                    CommandParameter="{Binding SelectedStudent}">
+                        <TextBlock Text="Удалить"/>
+                    </Button>
+                </WrapPanel>
+            </GroupBox>
+
+            <GroupBox Header="Работа с файлом">
+                <WrapPanel>
+                    <Button Command="{Binding OpenCommand}"  Style="{StaticResource Button}"  >
+                        <TextBlock Text="Открыть"/>
+                    </Button>
+                    <Button Command="{Binding SaveCommand}"  Style="{StaticResource SaveButton}" >
+                        <TextBlock Text="Сохранить"/>
+                    </Button>
+                </WrapPanel>
+            </GroupBox>
+        </StackPanel>
+    </Grid>
+</Window>
